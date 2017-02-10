@@ -1,13 +1,18 @@
 #Ben Boggs
-#trying to create a plot of logistic map (bifurcation diagram)
-
+#plots logistic map (bifurcation diagram) y=f, x=lambda
 
 import numpy
 import matplotlib.pyplot as plt
 
-lam = numpy.linspace(0, 4, 400)
+accuracy = 1000.0 #accurate to xth decimal, ie 1000.0 = accurate to thousandths
+				  #lower accuracy renders faster, less sharp
+				  #must be type float/double
+density = 4000 #number of linearly spaced lambda values
+			   #lower density renders faster, less detail
+			   #must be type int
 
-x = .5 #numpy.linspace(0, 1, 100)
+lam = numpy.linspace(0, 4, density)
+x = .5 #initial population constant, arbitrary
 
 def pattern(r, iter):
 	for x in range(len(r)):
@@ -17,25 +22,22 @@ def pattern(r, iter):
 
 
 for l in lam:
+	print l #completion status (done at 4.0)
 	r = []
-	if l<1.01:
+	if l<=1.00000000000:
 		plt.plot(l, 0, ',r')
 	else:
 		r.append(0.0)
 		q = l*x*(1-x)
-		dq = (int(q*100000))/100000.0
+		dq = (int(q*accuracy))/accuracy
 		while pattern(r, dq) == -1:
 			r.append(dq)
 			q = l*r[-1]*(1-r[-1])
-			dq = (int(q*100000))/100000.0
-			print dq
-		print pattern(r, dq)
+			dq = (int(q*accuracy))/accuracy
 		for i in range(pattern(r, dq), len(r)):
 			plt.plot(l, r[i], ',r')
+
 plt.show()
-
-
-
 
 '''
 1: define parameters of lambda to be 0:4 in increments of .01
